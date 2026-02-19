@@ -1,0 +1,45 @@
+name: Self-Hosted Runner Validation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-runner:
+    runs-on: self-hosted
+
+    steps:
+      - name: Show runner info
+        run: |
+          echo "Runner name: $RUNNER_NAME"
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner Arch: $RUNNER_ARCH"
+          uname -a
+
+      - name: Check Ubuntu version
+        run: |
+          lsb_release -a || cat /etc/os-release
+
+      - name: Verify required libraries
+        run: |
+          dpkg -l | grep -E 'libicu|libssl|libkrb5|zlib|libgcc|libstdc++'
+
+      - name: Verify core tools
+        run: |
+          which git && git --version
+          which curl && curl --version
+          which jq && jq --version
+          which unzip && unzip -v | head -n 2
+
+      - name: Verify CodeQL
+        run: |
+          which codeql
+          codeql --version
+
+      - name: Verify runner runtime (.NET)
+        run: |
+          ldd ./bin/Runner.Listener | grep "not found" && exit 1 || echo "All dependencies resolved"
+
+      - name: Disk & Memory Info
+        run: |
+          df -h
+          free -h
