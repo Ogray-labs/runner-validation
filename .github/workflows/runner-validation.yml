@@ -5,7 +5,7 @@ on:
 
 jobs:
   validate-runner:
-    runs-on: podman-runner
+    runs-on: org-runner-01
 
     steps:
       - name: Show runner info
