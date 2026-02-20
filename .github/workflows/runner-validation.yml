@@ -5,7 +5,7 @@ on:
 
 jobs:
   validate-runner:
-    runs-on: self-hosted
+    runs-on: podman-runner
 
     steps:
       - name: Show runner info
