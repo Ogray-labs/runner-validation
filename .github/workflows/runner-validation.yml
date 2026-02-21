@@ -5,7 +5,7 @@ on:
 
 jobs:
   validate-runner:
-    runs-on: org-runner-01
+    runs-on: self-hosted
 
     steps:
       - name: Show runner info
